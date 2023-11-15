@@ -1,0 +1,52 @@
+version: "3.4"
+
+services:
+
+  database:
+    build:
+      context: ./docker/db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+    networks:
+      - db-creator
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: database
+    depends_on:
+      - database
+    networks:
+      - db-creator
+
+  app:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: ["/usr/bin/php","dbCreator.php"]
+    environment:
+      DB_HOST: database
+      DB_ROOTUSER: root
+      DB_ROOTPWD: root
+      DB_USER: test1
+      DB_PWD: test1
+      DB_NAME: test1
+      MAX_QUERY_PER_HOUR: 0
+      MAX_CONNECTIONS_PER_HOUR: 0
+      MAX_UPDATES_PER_HOUR: 0
+      MAX_USER_CONNECTIONS: 0
+    depends_on:
+      - database
+    networks:
+      - db-creator
+
+networks:
+  db-creator:
+
+
