@@ -50,13 +50,13 @@ function createDatabase(
             }
             echo "[OK] USER $user created!\n";
         }
-        $query = "SET PASSWORD FOR `$user`@`%` = PASSWORD('$password');";
+        $query = "ALTER USER `$user`@`%` IDENTIFIED BY '$password' WITH MAX_QUERIES_PER_HOUR " . $maxQueryPerHour . " MAX_CONNECTIONS_PER_HOUR " . $maxConnectionsPerHour . " MAX_UPDATES_PER_HOUR " . $maxUpdatesPerHour . " MAX_USER_CONNECTIONS " . $maxUserConnections .";";
         $result = $dbConnection->query($query);
         if ($result !== TRUE) {
             throw new Exception(sprintf("Set User Password Error (' %s ')", $dbConnection->error), 500);
         }
         echo "[OK] Password for USER $user updated!\n";
-        $query = "GRANT USAGE ON *.* TO '$user'@'%' REQUIRE NONE WITH MAX_QUERIES_PER_HOUR " . $maxQueryPerHour . " MAX_CONNECTIONS_PER_HOUR " . $maxConnectionsPerHour . " MAX_UPDATES_PER_HOUR " . $maxUpdatesPerHour . " MAX_USER_CONNECTIONS " . $maxUserConnections . ";";
+        $query = "GRANT USAGE ON *.* TO '$user'@'%';";
         $result = $dbConnection->query($query);
         if ($result !== TRUE) {
             throw new Exception(sprintf("Grant User Usage Permissions Error (' %s ')", $dbConnection->error), 500);

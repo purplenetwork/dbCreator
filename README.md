@@ -13,3 +13,8 @@ Mandatory environmente variables to set:
 - MAX_CONNECTIONS_PER_HOUR (set to 0 to allow infinite)
 - MAX_UPDATES_PER_HOUR (set to 0 to allow infinite)
 - MAX_USER_CONNECTIONS (set to 0 to allow infinite)
+
+docker login
+docker build . -t purplenetworksrl/db-creator
+docker push purplenetworksrl/db-creator
+
